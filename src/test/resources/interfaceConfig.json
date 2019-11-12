@@ -1,0 +1,10 @@
+[
+  {
+    "interfaceId": "BDtrans",
+    "serviceType": "bd_translate",
+    "url": "https://fanyi-api.baidu.com/api/trans/vip/translate",
+    "basicAuthUser": "",
+    "basicAuthPass": "",
+    "timeout":"10"
+  }
+]
