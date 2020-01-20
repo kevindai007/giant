@@ -58,7 +58,7 @@ public abstract class ThirdCommonService {
             responseInfo = parserResult(result);
         } catch (Exception e) {
             log.error("http error,{}", e.toString());
-            return GiantResponseInfo.failure(ErrorCode.PARAM_NULL_ERROR);
+            return GiantResponseInfo.failure(ErrorCode.UNKNOWN_ERROR);
         }
         return responseInfo;
     }

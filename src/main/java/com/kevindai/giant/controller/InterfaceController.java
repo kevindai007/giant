@@ -26,6 +26,15 @@ public class InterfaceController {
     private GiantService giantService;
 
 
+    /**
+     * 1.0版本请求基本都是通过硬编码的方式完成
+     * @param request
+     * @param partnerCode
+     * @param partnerKey
+     * @param seqId
+     * @param product
+     * @return
+     */
     @PostMapping(value = "run", consumes = "application/x-www-form-urlencoded", produces = "application/json; charset=utf-8")
     public GiantResponseInfo run(HttpServletRequest request
             , @RequestParam("partner_code") String partnerCode
