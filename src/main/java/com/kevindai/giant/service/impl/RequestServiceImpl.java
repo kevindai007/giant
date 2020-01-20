@@ -5,17 +5,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.FluentIterable;
 import com.kevindai.giant.component.CommonHttpClient;
-import com.kevindai.giant.constants.ContentTypeConstants;
-import com.kevindai.giant.constants.MethodTypeConstants;
-import com.kevindai.giant.constants.ParamTypeEnum;
-import com.kevindai.giant.constants.SendSpaceConstants;
+import com.kevindai.giant.constants.*;
 import com.kevindai.giant.enums.ErrorCode;
 import com.kevindai.giant.model.ServiceConfigInfoWithBLOBs;
 import com.kevindai.giant.pojo.GiantResponseInfo;
 import com.kevindai.giant.service.RequestService;
 import com.kevindai.giant.utils.VelocityTransfer;
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -29,6 +29,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -51,6 +53,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Autowired
     private CommonHttpClient httpClient;
+
+    private static GroovyShell groovyShell = new GroovyShell();
+    private static Map<String, Script> groovyScriptCache = new ConcurrentHashMap<>();
 
     @Override
     public GiantResponseInfo request(ServiceConfigInfoWithBLOBs serviceConfigInfo, HttpServletRequest request) {
@@ -107,7 +112,7 @@ public class RequestServiceImpl implements RequestService {
             HttpPost post = new HttpPost(url);
             //form表单
             if (ContentTypeConstants.FORM.equals(serviceConfigInfo.getContentType())) {
-                post.setEntity(buildFormBodyEntity(array, parameterMap));
+                post.setEntity(buildFormBodyEntity(array, parameterMap, serviceConfigInfo.getRequestScript()));
             } else if (ContentTypeConstants.JSON.equals(serviceConfigInfo.getMethodType())) {
                 //json格式
                 post.setEntity(buildJSONBodyEntity(array, parameterMap));
@@ -181,13 +186,22 @@ public class RequestServiceImpl implements RequestService {
      * @param parameterMap
      * @return
      */
-    private StringEntity buildFormBodyEntity(JSONArray array, Map<String, String[]> parameterMap) {
+    private StringEntity buildFormBodyEntity(JSONArray array, Map<String, String[]> parameterMap, String requestScript) {
         Map<String, String> paramValueMap = buildParamValue(array, SendSpaceConstants.BODY, parameterMap);
 
         List<NameValuePair> pairs = new ArrayList<>();
         for (Map.Entry<String, String> entry : paramValueMap.entrySet()) {
             pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
+
+        //通过groovy脚本构建一些特殊参数
+        try {
+            pairs.addAll(invoke(requestScript, GlobeConstants.GROOVY_SCRIPT_FUN_NAME, pairs, BDTransConstant.APPID, BDTransConstant.APPKEY, parameterMap));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("groovy {} script run error",requestScript);
+        }
+
         UrlEncodedFormEntity entity = new UrlEncodedFormEntity(pairs, Charsets.UTF_8);
         return entity;
     }
@@ -203,9 +217,33 @@ public class RequestServiceImpl implements RequestService {
 
     }
 
+    private static <T> T invoke(String scriptText, String function, Object... objects) throws Exception {
+        Script script;
+        String cacheKey = DigestUtils.md5Hex(scriptText);
 
-    public static void main(String[] args) {
+        if (groovyScriptCache.containsKey(cacheKey)) {
+            script = groovyScriptCache.get(cacheKey);
+        } else {
+            script = groovyShell.parse(scriptText);
+            groovyScriptCache.put(cacheKey, script);
+        }
+        return (T) InvokerHelper.invokeMethod(script, function, objects);
+    }
 
+
+    public static void main(String[] args) throws Exception {
+        String script = "def parse(List<org.apache.http.NameValuePair> pairs, String appId, String appKey, Map<String, String[]> paramValueMap) {\n" +
+                "        long l = System.currentTimeMillis();\n" +
+                "        pairs.add(new org.apache.http.message.BasicNameValuePair(\"salt\", String.valueOf(l)));\n" +
+                "        def q = paramValueMap.get(\"q\")[0];\n" +
+                "        pairs.add(new org.apache.http.message.BasicNameValuePair(\"sign\", cn.hutool.crypto.SecureUtil.md5((appId + q + l + appKey))));\n" +
+                "        return pairs;\n" +
+                "    }";
+        List<NameValuePair> pairs = new ArrayList<>();
+        Map<String, String[]> parameterMap = new HashMap<>();
+        parameterMap.put("q",new String[]{"侧四"});
+        Object invoke = RequestServiceImpl.invoke(script, GlobeConstants.GROOVY_SCRIPT_FUN_NAME, pairs, BDTransConstant.APPID, BDTransConstant.APPKEY,parameterMap);
+        System.out.println(JSON.toJSONString(invoke));
 
     }
 }
