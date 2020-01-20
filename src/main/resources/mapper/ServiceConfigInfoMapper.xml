@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kevindai.giant.mapper.ServiceConfigInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.kevindai.giant.model.ServiceConfigInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="service_code" property="serviceCode" jdbcType="VARCHAR" />
+    <result column="service_name" property="serviceName" jdbcType="VARCHAR" />
+    <result column="provider_id" property="providerId" jdbcType="BIGINT" />
+    <result column="service_type" property="serviceType" jdbcType="INTEGER" />
+    <result column="method_type" property="methodType" jdbcType="VARCHAR" />
+    <result column="content_type" property="contentType" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="billing_service_code" property="billingServiceCode" jdbcType="VARCHAR" />
+    <result column="operate_by_user_name" property="operateByUserName" jdbcType="VARCHAR" />
+    <result column="operate_by_user_id" property="operateByUserId" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="billing_config" property="billingConfig" jdbcType="VARCHAR" />
+    <result column="timeout" property="timeout" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.kevindai.giant.model.ServiceConfigInfoWithBLOBs" extends="BaseResultMap" >
+    <result column="response_script" property="responseScript" jdbcType="LONGVARCHAR" />
+    <result column="request_script" property="requestScript" jdbcType="LONGVARCHAR" />
+    <result column="input_template" property="inputTemplate" jdbcType="LONGVARCHAR" />
+    <result column="output_template" property="outputTemplate" jdbcType="LONGVARCHAR" />
+    <result column="input_config" property="inputConfig" jdbcType="LONGVARCHAR" />
+    <result column="out_config" property="outConfig" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, service_code, service_name, provider_id, service_type, method_type, content_type, 
+    url, billing_service_code, operate_by_user_name, operate_by_user_id, gmt_create, 
+    gmt_modify, status, billing_config ,timeout
+  </sql>
+  <sql id="Blob_Column_List" >
+    response_script, request_script, input_template, output_template, input_config, out_config
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.kevindai.giant.model.ServiceConfigInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from service_config_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kevindai.giant.model.ServiceConfigInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from service_config_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from service_config_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from service_config_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kevindai.giant.model.ServiceConfigInfoExample" >
+    delete from service_config_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kevindai.giant.model.ServiceConfigInfoWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
+    insert into service_config_info (service_code, service_name, provider_id, 
+      service_type, method_type, content_type, 
+      url, billing_service_code, operate_by_user_name, 
+      operate_by_user_id, gmt_create, gmt_modify, 
+      status, billing_config, response_script, 
+      request_script, input_template, output_template, 
+      input_config, out_config ,timeout)
+    values (#{serviceCode,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, #{providerId,jdbcType=BIGINT}, 
+      #{serviceType,jdbcType=INTEGER}, #{methodType,jdbcType=VARCHAR}, #{contentType,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{billingServiceCode,jdbcType=VARCHAR}, #{operateByUserName,jdbcType=VARCHAR}, 
+      #{operateByUserId,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{billingConfig,jdbcType=VARCHAR}, #{responseScript,jdbcType=LONGVARCHAR}, 
+      #{requestScript,jdbcType=LONGVARCHAR}, #{inputTemplate,jdbcType=LONGVARCHAR}, #{outputTemplate,jdbcType=LONGVARCHAR}, 
+      #{inputConfig,jdbcType=LONGVARCHAR}, #{outConfig,jdbcType=LONGVARCHAR},#{timeout,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kevindai.giant.model.ServiceConfigInfoWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
+    insert into service_config_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serviceCode != null" >
+        service_code,
+      </if>
+      <if test="serviceName != null" >
+        service_name,
+      </if>
+      <if test="providerId != null" >
+        provider_id,
+      </if>
+      <if test="serviceType != null" >
+        service_type,
+      </if>
+      <if test="methodType != null" >
+        method_type,
+      </if>
+      <if test="contentType != null" >
+        content_type,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="billingServiceCode != null" >
+        billing_service_code,
+      </if>
+      <if test="operateByUserName != null" >
+        operate_by_user_name,
+      </if>
+      <if test="operateByUserId != null" >
+        operate_by_user_id,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="billingConfig != null" >
+        billing_config,
+      </if>
+      <if test="responseScript != null" >
+        response_script,
+      </if>
+      <if test="requestScript != null" >
+        request_script,
+      </if>
+      <if test="inputTemplate != null" >
+        input_template,
+      </if>
+      <if test="outputTemplate != null" >
+        output_template,
+      </if>
+      <if test="inputConfig != null" >
+        input_config,
+      </if>
+      <if test="outConfig != null" >
+        out_config,
+      </if>
+      <if test="timeout != null" >
+        timeout,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serviceCode != null" >
+        #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="providerId != null" >
+        #{providerId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceType != null" >
+        #{serviceType,jdbcType=INTEGER},
+      </if>
+      <if test="methodType != null" >
+        #{methodType,jdbcType=VARCHAR},
+      </if>
+      <if test="contentType != null" >
+        #{contentType,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="billingServiceCode != null" >
+        #{billingServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateByUserName != null" >
+        #{operateByUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateByUserId != null" >
+        #{operateByUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="billingConfig != null" >
+        #{billingConfig,jdbcType=VARCHAR},
+      </if>
+      <if test="responseScript != null" >
+        #{responseScript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="requestScript != null" >
+        #{requestScript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="inputTemplate != null" >
+        #{inputTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="outputTemplate != null" >
+        #{outputTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="inputConfig != null" >
+        #{inputConfig,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="outConfig != null" >
+        #{outConfig,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="timeout != null" >
+        #{timeout,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kevindai.giant.model.ServiceConfigInfoExample" resultType="java.lang.Integer" >
+    select count(*) from service_config_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update service_config_info
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.serviceCode != null" >
+        service_code = #{record.serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceName != null" >
+        service_name = #{record.serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.providerId != null" >
+        provider_id = #{record.providerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.serviceType != null" >
+        service_type = #{record.serviceType,jdbcType=INTEGER},
+      </if>
+      <if test="record.methodType != null" >
+        method_type = #{record.methodType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentType != null" >
+        content_type = #{record.contentType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null" >
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billingServiceCode != null" >
+        billing_service_code = #{record.billingServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateByUserName != null" >
+        operate_by_user_name = #{record.operateByUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateByUserId != null" >
+        operate_by_user_id = #{record.operateByUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModify != null" >
+        gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.billingConfig != null" >
+        billing_config = #{record.billingConfig,jdbcType=VARCHAR},
+      </if>
+      <if test="record.responseScript != null" >
+        response_script = #{record.responseScript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.requestScript != null" >
+        request_script = #{record.requestScript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.inputTemplate != null" >
+        input_template = #{record.inputTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.outputTemplate != null" >
+        output_template = #{record.outputTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.inputConfig != null" >
+        input_config = #{record.inputConfig,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.outConfig != null" >
+        out_config = #{record.outConfig,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.timeout != null" >
+        out_config = #{record.timeout,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update service_config_info
+    set id = #{record.id,jdbcType=BIGINT},
+      service_code = #{record.serviceCode,jdbcType=VARCHAR},
+      service_name = #{record.serviceName,jdbcType=VARCHAR},
+      provider_id = #{record.providerId,jdbcType=BIGINT},
+      service_type = #{record.serviceType,jdbcType=INTEGER},
+      method_type = #{record.methodType,jdbcType=VARCHAR},
+      content_type = #{record.contentType,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      billing_service_code = #{record.billingServiceCode,jdbcType=VARCHAR},
+      operate_by_user_name = #{record.operateByUserName,jdbcType=VARCHAR},
+      operate_by_user_id = #{record.operateByUserId,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER},
+      billing_config = #{record.billingConfig,jdbcType=VARCHAR},
+      response_script = #{record.responseScript,jdbcType=LONGVARCHAR},
+      request_script = #{record.requestScript,jdbcType=LONGVARCHAR},
+      input_template = #{record.inputTemplate,jdbcType=LONGVARCHAR},
+      output_template = #{record.outputTemplate,jdbcType=LONGVARCHAR},
+      input_config = #{record.inputConfig,jdbcType=LONGVARCHAR},
+      out_config = #{record.outConfig,jdbcType=LONGVARCHAR},
+      timeout = #{record.timeout,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update service_config_info
+    set id = #{record.id,jdbcType=BIGINT},
+      service_code = #{record.serviceCode,jdbcType=VARCHAR},
+      service_name = #{record.serviceName,jdbcType=VARCHAR},
+      provider_id = #{record.providerId,jdbcType=BIGINT},
+      service_type = #{record.serviceType,jdbcType=INTEGER},
+      method_type = #{record.methodType,jdbcType=VARCHAR},
+      content_type = #{record.contentType,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      billing_service_code = #{record.billingServiceCode,jdbcType=VARCHAR},
+      operate_by_user_name = #{record.operateByUserName,jdbcType=VARCHAR},
+      operate_by_user_id = #{record.operateByUserId,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER},
+      billing_config = #{record.billingConfig,jdbcType=VARCHAR},
+      timeout = #{record.timeout,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kevindai.giant.model.ServiceConfigInfoWithBLOBs" >
+    update service_config_info
+    <set >
+      <if test="serviceCode != null" >
+        service_code = #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="providerId != null" >
+        provider_id = #{providerId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceType != null" >
+        service_type = #{serviceType,jdbcType=INTEGER},
+      </if>
+      <if test="methodType != null" >
+        method_type = #{methodType,jdbcType=VARCHAR},
+      </if>
+      <if test="contentType != null" >
+        content_type = #{contentType,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="billingServiceCode != null" >
+        billing_service_code = #{billingServiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operateByUserName != null" >
+        operate_by_user_name = #{operateByUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateByUserId != null" >
+        operate_by_user_id = #{operateByUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="billingConfig != null" >
+        billing_config = #{billingConfig,jdbcType=VARCHAR},
+      </if>
+      <if test="responseScript != null" >
+        response_script = #{responseScript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="requestScript != null" >
+        request_script = #{requestScript,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="inputTemplate != null" >
+        input_template = #{inputTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="outputTemplate != null" >
+        output_template = #{outputTemplate,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="inputConfig != null" >
+        input_config = #{inputConfig,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="outConfig != null" >
+        out_config = #{outConfig,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="timeout != null" >
+        timeout = #{timeout,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.kevindai.giant.model.ServiceConfigInfoWithBLOBs" >
+    update service_config_info
+    set service_code = #{serviceCode,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      provider_id = #{providerId,jdbcType=BIGINT},
+      service_type = #{serviceType,jdbcType=INTEGER},
+      method_type = #{methodType,jdbcType=VARCHAR},
+      content_type = #{contentType,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      billing_service_code = #{billingServiceCode,jdbcType=VARCHAR},
+      operate_by_user_name = #{operateByUserName,jdbcType=VARCHAR},
+      operate_by_user_id = #{operateByUserId,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      billing_config = #{billingConfig,jdbcType=VARCHAR},
+      response_script = #{responseScript,jdbcType=LONGVARCHAR},
+      request_script = #{requestScript,jdbcType=LONGVARCHAR},
+      input_template = #{inputTemplate,jdbcType=LONGVARCHAR},
+      output_template = #{outputTemplate,jdbcType=LONGVARCHAR},
+      input_config = #{inputConfig,jdbcType=LONGVARCHAR},
+      out_config = #{outConfig,jdbcType=LONGVARCHAR},
+      timeout = #{timeout,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kevindai.giant.model.ServiceConfigInfo" >
+    update service_config_info
+    set service_code = #{serviceCode,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      provider_id = #{providerId,jdbcType=BIGINT},
+      service_type = #{serviceType,jdbcType=INTEGER},
+      method_type = #{methodType,jdbcType=VARCHAR},
+      content_type = #{contentType,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      billing_service_code = #{billingServiceCode,jdbcType=VARCHAR},
+      operate_by_user_name = #{operateByUserName,jdbcType=VARCHAR},
+      operate_by_user_id = #{operateByUserId,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      billing_config = #{billingConfig,jdbcType=VARCHAR},
+      timeout = #{timeout,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

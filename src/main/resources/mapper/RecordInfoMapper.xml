@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kevindai.giant.mapper.RecordInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.kevindai.giant.model.RecordInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sequence_id" property="sequenceId" jdbcType="VARCHAR" />
+    <result column="partner_code" property="partnerCode" jdbcType="VARCHAR" />
+    <result column="service_code" property="serviceCode" jdbcType="VARCHAR" />
+    <result column="service_name" property="serviceName" jdbcType="VARCHAR" />
+    <result column="service_id" property="serviceId" jdbcType="BIGINT" />
+    <result column="service_type" property="serviceType" jdbcType="INTEGER" />
+    <result column="response_result" property="responseResult" jdbcType="INTEGER" />
+    <result column="search_result" property="searchResult" jdbcType="INTEGER" />
+    <result column="cost_time" property="costTime" jdbcType="INTEGER" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modify" property="gmtModify" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.kevindai.giant.model.RecordInfoWithBLOBs" extends="BaseResultMap" >
+    <result column="original_request_params" property="originalRequestParams" jdbcType="LONGVARCHAR" />
+    <result column="final_response" property="finalResponse" jdbcType="LONGVARCHAR" />
+    <result column="request_params" property="requestParams" jdbcType="LONGVARCHAR" />
+    <result column="response" property="response" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, sequence_id, partner_code, service_code, service_name, service_id, service_type, 
+    response_result, search_result, cost_time, gmt_create, gmt_modify
+  </sql>
+  <sql id="Blob_Column_List" >
+    original_request_params, final_response, request_params, response
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.kevindai.giant.model.RecordInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from record_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.kevindai.giant.model.RecordInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from record_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from record_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from record_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kevindai.giant.model.RecordInfoExample" >
+    delete from record_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kevindai.giant.model.RecordInfoWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
+    insert into record_info (sequence_id, partner_code, service_code, 
+      service_name, service_id, service_type, 
+      response_result, search_result, cost_time, 
+      gmt_create, gmt_modify, original_request_params, 
+      final_response, request_params, response
+      )
+    values (#{sequenceId,jdbcType=VARCHAR}, #{partnerCode,jdbcType=VARCHAR}, #{serviceCode,jdbcType=VARCHAR}, 
+      #{serviceName,jdbcType=VARCHAR}, #{serviceId,jdbcType=BIGINT}, #{serviceType,jdbcType=INTEGER}, 
+      #{responseResult,jdbcType=INTEGER}, #{searchResult,jdbcType=INTEGER}, #{costTime,jdbcType=INTEGER}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModify,jdbcType=TIMESTAMP}, #{originalRequestParams,jdbcType=LONGVARCHAR}, 
+      #{finalResponse,jdbcType=LONGVARCHAR}, #{requestParams,jdbcType=LONGVARCHAR}, #{response,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kevindai.giant.model.RecordInfoWithBLOBs" useGeneratedKeys="true" keyProperty="id" >
+    insert into record_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sequenceId != null" >
+        sequence_id,
+      </if>
+      <if test="partnerCode != null" >
+        partner_code,
+      </if>
+      <if test="serviceCode != null" >
+        service_code,
+      </if>
+      <if test="serviceName != null" >
+        service_name,
+      </if>
+      <if test="serviceId != null" >
+        service_id,
+      </if>
+      <if test="serviceType != null" >
+        service_type,
+      </if>
+      <if test="responseResult != null" >
+        response_result,
+      </if>
+      <if test="searchResult != null" >
+        search_result,
+      </if>
+      <if test="costTime != null" >
+        cost_time,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify,
+      </if>
+      <if test="originalRequestParams != null" >
+        original_request_params,
+      </if>
+      <if test="finalResponse != null" >
+        final_response,
+      </if>
+      <if test="requestParams != null" >
+        request_params,
+      </if>
+      <if test="response != null" >
+        response,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sequenceId != null" >
+        #{sequenceId,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerCode != null" >
+        #{partnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCode != null" >
+        #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceType != null" >
+        #{serviceType,jdbcType=INTEGER},
+      </if>
+      <if test="responseResult != null" >
+        #{responseResult,jdbcType=INTEGER},
+      </if>
+      <if test="searchResult != null" >
+        #{searchResult,jdbcType=INTEGER},
+      </if>
+      <if test="costTime != null" >
+        #{costTime,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="originalRequestParams != null" >
+        #{originalRequestParams,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="finalResponse != null" >
+        #{finalResponse,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="requestParams != null" >
+        #{requestParams,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="response != null" >
+        #{response,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kevindai.giant.model.RecordInfoExample" resultType="java.lang.Integer" >
+    select count(*) from record_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update record_info
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.sequenceId != null" >
+        sequence_id = #{record.sequenceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.partnerCode != null" >
+        partner_code = #{record.partnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceCode != null" >
+        service_code = #{record.serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceName != null" >
+        service_name = #{record.serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceId != null" >
+        service_id = #{record.serviceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.serviceType != null" >
+        service_type = #{record.serviceType,jdbcType=INTEGER},
+      </if>
+      <if test="record.responseResult != null" >
+        response_result = #{record.responseResult,jdbcType=INTEGER},
+      </if>
+      <if test="record.searchResult != null" >
+        search_result = #{record.searchResult,jdbcType=INTEGER},
+      </if>
+      <if test="record.costTime != null" >
+        cost_time = #{record.costTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModify != null" >
+        gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.originalRequestParams != null" >
+        original_request_params = #{record.originalRequestParams,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.finalResponse != null" >
+        final_response = #{record.finalResponse,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.requestParams != null" >
+        request_params = #{record.requestParams,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.response != null" >
+        response = #{record.response,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update record_info
+    set id = #{record.id,jdbcType=BIGINT},
+      sequence_id = #{record.sequenceId,jdbcType=VARCHAR},
+      partner_code = #{record.partnerCode,jdbcType=VARCHAR},
+      service_code = #{record.serviceCode,jdbcType=VARCHAR},
+      service_name = #{record.serviceName,jdbcType=VARCHAR},
+      service_id = #{record.serviceId,jdbcType=BIGINT},
+      service_type = #{record.serviceType,jdbcType=INTEGER},
+      response_result = #{record.responseResult,jdbcType=INTEGER},
+      search_result = #{record.searchResult,jdbcType=INTEGER},
+      cost_time = #{record.costTime,jdbcType=INTEGER},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP},
+      original_request_params = #{record.originalRequestParams,jdbcType=LONGVARCHAR},
+      final_response = #{record.finalResponse,jdbcType=LONGVARCHAR},
+      request_params = #{record.requestParams,jdbcType=LONGVARCHAR},
+      response = #{record.response,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update record_info
+    set id = #{record.id,jdbcType=BIGINT},
+      sequence_id = #{record.sequenceId,jdbcType=VARCHAR},
+      partner_code = #{record.partnerCode,jdbcType=VARCHAR},
+      service_code = #{record.serviceCode,jdbcType=VARCHAR},
+      service_name = #{record.serviceName,jdbcType=VARCHAR},
+      service_id = #{record.serviceId,jdbcType=BIGINT},
+      service_type = #{record.serviceType,jdbcType=INTEGER},
+      response_result = #{record.responseResult,jdbcType=INTEGER},
+      search_result = #{record.searchResult,jdbcType=INTEGER},
+      cost_time = #{record.costTime,jdbcType=INTEGER},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{record.gmtModify,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kevindai.giant.model.RecordInfoWithBLOBs" >
+    update record_info
+    <set >
+      <if test="sequenceId != null" >
+        sequence_id = #{sequenceId,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerCode != null" >
+        partner_code = #{partnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCode != null" >
+        service_code = #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceId != null" >
+        service_id = #{serviceId,jdbcType=BIGINT},
+      </if>
+      <if test="serviceType != null" >
+        service_type = #{serviceType,jdbcType=INTEGER},
+      </if>
+      <if test="responseResult != null" >
+        response_result = #{responseResult,jdbcType=INTEGER},
+      </if>
+      <if test="searchResult != null" >
+        search_result = #{searchResult,jdbcType=INTEGER},
+      </if>
+      <if test="costTime != null" >
+        cost_time = #{costTime,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModify != null" >
+        gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      </if>
+      <if test="originalRequestParams != null" >
+        original_request_params = #{originalRequestParams,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="finalResponse != null" >
+        final_response = #{finalResponse,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="requestParams != null" >
+        request_params = #{requestParams,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="response != null" >
+        response = #{response,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.kevindai.giant.model.RecordInfoWithBLOBs" >
+    update record_info
+    set sequence_id = #{sequenceId,jdbcType=VARCHAR},
+      partner_code = #{partnerCode,jdbcType=VARCHAR},
+      service_code = #{serviceCode,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      service_id = #{serviceId,jdbcType=BIGINT},
+      service_type = #{serviceType,jdbcType=INTEGER},
+      response_result = #{responseResult,jdbcType=INTEGER},
+      search_result = #{searchResult,jdbcType=INTEGER},
+      cost_time = #{costTime,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP},
+      original_request_params = #{originalRequestParams,jdbcType=LONGVARCHAR},
+      final_response = #{finalResponse,jdbcType=LONGVARCHAR},
+      request_params = #{requestParams,jdbcType=LONGVARCHAR},
+      response = #{response,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kevindai.giant.model.RecordInfo" >
+    update record_info
+    set sequence_id = #{sequenceId,jdbcType=VARCHAR},
+      partner_code = #{partnerCode,jdbcType=VARCHAR},
+      service_code = #{serviceCode,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      service_id = #{serviceId,jdbcType=BIGINT},
+      service_type = #{serviceType,jdbcType=INTEGER},
+      response_result = #{responseResult,jdbcType=INTEGER},
+      search_result = #{searchResult,jdbcType=INTEGER},
+      cost_time = #{costTime,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modify = #{gmtModify,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
